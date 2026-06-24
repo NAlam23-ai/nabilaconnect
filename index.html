@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nabila Alam – Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:    #c8dba8;
+      --sage-dk: #a8c485;
+      --olive:   #3d4a2e;
+      --cream:   #f5f0e8;
+      --gold:    #c9a84c;
+      --muted:   #6b7a57;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    html { background: #c8dba8; }
+
+    body {
+      background: #c8dba8;
+      color: var(--olive);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--olive);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease, background 0.2s;
+    }
+    body:hover #cursor { opacity: 1; }
+
+    /* Nav dock */
+    nav {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      background: rgba(61,74,46,0.88);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: 40px;
+      z-index: 100;
+    }
+    nav a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 1;
+      transition: transform 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+    }
+    nav a:hover { transform: scale(1.25); color: var(--gold); }
+    nav a.active { color: var(--gold); }
+    nav span.nav-label {
+      color: var(--cream);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      font-family: 'DM Sans', sans-serif;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Page layout */
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .photo-wrap {
+      position: relative;
+      width: 130px; height: 130px;
+    }
+    .photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      opacity: 0.6;
+      animation: spin 18s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .photo-wrap img {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    /* Typed text */
+    .typed-wrap {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--olive);
+      opacity: 0.7;
+      min-height: 1.4em;
+    }
+    .typed-wrap span { border-right: 2px solid var(--gold); padding-right: 2px; }
+
+    /* Divider */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 8px auto;
+      opacity: 0.6;
+    }
+
+    /* Contact section */
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      animation: fadeUp 0.8s 0.25s ease both;
+    }
+
+    .contact-card {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--olive);
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(61,74,46,0.08);
+    }
+    .contact-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(61,74,46,0.14);
+    }
+    .contact-icon {
+      width: 40px; height: 40px;
+      background: var(--sage);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .contact-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .contact-value {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--olive);
+    }
+
+    /* Location */
+    .location {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* Video section */
+    .video-section {
+      width: 100%;
+      background: var(--cream);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(61,74,46,0.10);
+      position: relative;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+    .video-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--olive) 0%, var(--muted) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.03) 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
+    .play-btn {
+      width: 56px; height: 56px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, opacity 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+    .play-btn:hover { transform: scale(1.08); }
+    .play-btn svg { margin-left: 4px; }
+    .video-caption {
+      color: var(--cream);
+      font-size: 0.82rem;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.05em;
+    }
+    .video-meta {
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* QR section */
+    .qr-section {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(61,74,46,0.08);
+      animation: fadeUp 0.8s 0.55s ease both;
+    }
+    .qr-box {
+      width: 100px; height: 100px;
+      border: 2px dashed var(--gold);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.4;
+      padding: 8px;
+    }
+    .qr-caption {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.06em;
+    }
+    .qr-url {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--olive);
+      font-weight: 600;
+    }
+
+    /* Section headings */
+    .section-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 540px) {
+      main { max-width: 480px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- Nav Dock -->
+<nav>
+  <a href="index.html" class="active" title="Home">🏠</a>
+  <span class="nav-label">&nbsp;</span>
+  <a href="experience.html" title="Experience">💼</a>
+  <span class="nav-label">&nbsp;</span>
+  <a href="education.html" title="Education">🎓</a>
+  <span class="nav-label">&nbsp;</span>
+  <a href="skills.html" title="Skills">✨</a>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="photo-wrap">
+      <img src="nabila-photo.jpg" alt="Nabila Alam" />
+    </div>
+    <div>
+      <h1>Nabila Alam</h1>
+      <div class="divider"></div>
+      <p class="tagline">Where financial precision meets marketing intuition.</p>
+    </div>
+    <div class="typed-wrap">
+      <span id="typed-text"></span>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <p class="section-eyebrow">Get in Touch</p>
+  <div class="contact">
+    <a class="contact-card" href="mailto:nabial.connect@gmail.com">
+      <div class="contact-icon">✉️</div>
+      <div class="contact-text">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">nabial.connect@gmail.com</span>
+      </div>
+    </a>
+
+    <a class="contact-card" href="https://www.linkedin.com/in/nabila-alam-a705b4130" target="_blank" rel="noopener">
+      <div class="contact-icon">💼</div>
+      <div class="contact-text">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value">nabila-alam-a705b4130</span>
+      </div>
+    </a>
+
+    <div class="contact-card" style="cursor:default;">
+      <div class="contact-icon">📍</div>
+      <div class="contact-text">
+        <span class="contact-label">Location</span>
+        <span class="contact-value">Nuremberg, Germany</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video -->
+  <p class="section-eyebrow">Introduction</p>
+  <div class="video-section">
+    <div class="video-thumb">
+      <button class="play-btn" aria-label="Play introduction video">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+      </button>
+      <p class="video-caption">▶ My Introduction &amp; Motivation</p>
+    </div>
+    <p class="video-meta">Meet Nabila — a finance and marketing professional based in Nuremberg. Coming soon.</p>
+  </div>
+
+  <!-- QR -->
+  <p class="section-eyebrow">Share My Portfolio</p>
+  <div class="qr-section">
+    <div class="qr-box">QR code coming soon</div>
+    <p class="qr-url">nalam23-ai.github.io/nabilaconnect</p>
+    <p class="qr-caption">Scan to visit · Share with recruiters</p>
+  </div>
+</main>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // Typed text
+  const words = ['Finance', 'Marketing', 'Strategy', 'Controlling', 'Innovation'];
+  // all words styled identically via CSS
+  let wi = 0, ci = 0, deleting = false;
+  const el = document.getElementById('typed-text');
+  function type() {
+    const word = words[wi];
+    el.textContent = deleting ? word.slice(0, --ci) : word.slice(0, ++ci);
+    let delay = deleting ? 60 : 100;
+    if (!deleting && ci === word.length) { delay = 1600; deleting = true; }
+    else if (deleting && ci === 0)       { deleting = false; wi = (wi + 1) % words.length; delay = 400; }
+    setTimeout(type, delay);
+  }
+  type();
+</script>
+</body>
+</html>
