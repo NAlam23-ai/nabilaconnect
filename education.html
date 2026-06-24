@@ -83,51 +83,50 @@
     /* Arena */
     #arena {
       position: relative; z-index: 1;
-      width: 100%; height: 320px; overflow: hidden;
+      width: 100%; height: 360px; overflow: hidden;
     }
 
-    .chicken-wrap {
+    .animal-wrap {
       position: absolute;
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       cursor: pointer; opacity: 0;
+      transition: opacity 0.5s;
     }
-    .chicken-wrap:hover { z-index: 10; }
+    .animal-wrap:hover { z-index: 10; }
 
-    /* Round circle frame */
-    .chicken-circle {
-      width: 80px; height: 80px;
+    .animal-circle {
+      width: 84px; height: 84px;
       border-radius: 50%;
       background: var(--cream);
       box-shadow: 0 4px 16px rgba(42,61,48,0.18);
       border: 2px solid rgba(201,168,76,0.35);
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      animation: bounce 0.6s ease-in-out infinite alternate;
+      animation: bounce var(--bounce-dur) var(--bounce-delay) ease-in-out infinite alternate;
       transition: box-shadow 0.2s, border-color 0.2s;
     }
-    .chicken-wrap:hover .chicken-circle {
+    .animal-wrap:hover .animal-circle {
       box-shadow: 0 8px 28px rgba(42,61,48,0.28);
       border-color: var(--gold);
     }
 
     @keyframes bounce {
       from { transform: translateY(0px); }
-      to   { transform: translateY(-8px); }
+      to   { transform: translateY(-9px); }
     }
 
-    .chicken-circle img {
-      width: 90%; height: 90%;
+    .animal-circle img {
+      width: 88%; height: 88%;
       object-fit: contain;
     }
 
-    .chicken-label {
+    .animal-label {
       font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--olive); font-weight: 500; text-align: center;
       background: rgba(245,240,232,0.75); border-radius: 8px; padding: 2px 8px;
       white-space: nowrap;
     }
 
-    /* Hint */
     .tap-hint {
       position: relative; z-index: 1;
       text-align: center; font-size: 0.75rem; color: var(--muted);
@@ -216,11 +215,11 @@
 
 <div class="page-header">
   <h1>Education</h1>
-  <p>Tap a chicken to explore each degree</p>
+  <p>Tap an animal to explore each degree</p>
 </div>
 
 <div id="arena"></div>
-<p class="tap-hint">tap any chicken to see details</p>
+<p class="tap-hint">tap any animal to see details</p>
 
 <!-- Modal -->
 <div class="modal-overlay" id="overlay">
@@ -242,7 +241,6 @@
 </div>
 
 <script>
-  // Cursor
   const cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
@@ -259,10 +257,10 @@
     starsEl.appendChild(s);
   }
 
-  // Degree data
   const degrees = [
     {
       label: 'MA Marketing',
+      animal: 'animal-panda.png',
       name: 'International Marketing',
       type: 'Master of Arts · Pursuing',
       uni: 'Technische Hochschule Nürnberg Georg Simon Ohm, Germany',
@@ -272,6 +270,7 @@
     },
     {
       label: 'MSc Finance',
+      animal: 'animal-dog.png',
       name: 'International Finance & Economics',
       type: 'Master of Science · 2023',
       uni: 'Technische Hochschule Nürnberg Georg Simon Ohm, Germany',
@@ -281,6 +280,7 @@
     },
     {
       label: 'MBA Banking',
+      animal: 'animal-cat.png',
       name: 'Finance & Banking',
       type: 'MBA · 2015',
       uni: 'University of Chittagong, Bangladesh',
@@ -290,6 +290,7 @@
     },
     {
       label: 'BBA Finance',
+      animal: 'animal-owl.png',
       name: 'Finance & Accounting',
       type: 'BBA · 2013',
       uni: 'Independent University, Bangladesh',
@@ -299,37 +300,38 @@
     }
   ];
 
-  // Starting positions
-  const positions = [
-    { x: 0.08, y: 0.08 },
-    { x: 0.55, y: 0.06 },
-    { x: 0.12, y: 0.52 },
-    { x: 0.58, y: 0.50 }
-  ];
-
   const arena = document.getElementById('arena');
-  const SZ = 90, PAD = 10;
+  const SZ = 90, PAD = 14;
   const W = () => arena.clientWidth;
   const H = () => arena.clientHeight;
+
+  // Spread across full arena — 2x2 grid
+  const getPositions = () => [
+    { x: W() * 0.06,  y: H() * 0.05 },
+    { x: W() * 0.54,  y: H() * 0.08 },
+    { x: W() * 0.08,  y: H() * 0.52 },
+    { x: W() * 0.56,  y: H() * 0.50 }
+  ];
 
   const state = [];
   const wraps = [];
 
   degrees.forEach((deg, i) => {
     const wrap = document.createElement('div');
-    wrap.className = 'chicken-wrap';
+    wrap.className = 'animal-wrap';
 
     const circle = document.createElement('div');
-    circle.className = 'chicken-circle';
-    circle.style.animationDelay = `${i * 0.25}s`;
+    circle.className = 'animal-circle';
+    circle.style.setProperty('--bounce-dur', `${0.55 + i * 0.07}s`);
+    circle.style.setProperty('--bounce-delay', `${i * 0.28}s`);
 
     const img = document.createElement('img');
-    img.src = 'chicken.png';
+    img.src = deg.animal;
     img.alt = deg.label;
     circle.appendChild(img);
 
     const label = document.createElement('div');
-    label.className = 'chicken-label';
+    label.className = 'animal-label';
     label.textContent = deg.label;
 
     wrap.appendChild(circle);
@@ -338,27 +340,22 @@
     arena.appendChild(wrap);
     wraps.push(wrap);
 
-    // Fly-in then float
-    setTimeout(() => {
-      wrap.style.transition = 'opacity 0.5s';
-      wrap.style.opacity = '1';
-    }, 200 + i * 150);
+    setTimeout(() => { wrap.style.opacity = '1'; }, 200 + i * 160);
 
-    const x = positions[i].x * W();
-    const y = positions[i].y * H();
+    const pos = getPositions()[i];
     const angle = Math.random() * Math.PI * 2;
-    state.push({ x, y, vx: Math.cos(angle)*0.45, vy: Math.sin(angle)*0.45 });
-    wrap.style.left = x + 'px';
-    wrap.style.top  = y + 'px';
+    state.push({ x: pos.x, y: pos.y, vx: Math.cos(angle)*0.45, vy: Math.sin(angle)*0.4 });
+    wrap.style.left = pos.x + 'px';
+    wrap.style.top  = pos.y + 'px';
   });
 
   function float() {
     state.forEach((s, i) => {
       s.x += s.vx; s.y += s.vy;
-      if (s.x < PAD)          { s.x = PAD;          s.vx =  Math.abs(s.vx); }
-      if (s.x > W()-SZ-PAD)   { s.x = W()-SZ-PAD;   s.vx = -Math.abs(s.vx); }
-      if (s.y < PAD)          { s.y = PAD;          s.vy =  Math.abs(s.vy); }
-      if (s.y > H()-SZ-PAD)   { s.y = H()-SZ-PAD;   s.vy = -Math.abs(s.vy); }
+      if (s.x < PAD)         { s.x = PAD;         s.vx =  Math.abs(s.vx); }
+      if (s.x > W()-SZ-PAD)  { s.x = W()-SZ-PAD;  s.vx = -Math.abs(s.vx); }
+      if (s.y < PAD)         { s.y = PAD;         s.vy =  Math.abs(s.vy); }
+      if (s.y > H()-SZ-PAD)  { s.y = H()-SZ-PAD;  s.vy = -Math.abs(s.vy); }
       wraps[i].style.left = s.x + 'px';
       wraps[i].style.top  = s.y + 'px';
     });
@@ -366,7 +363,6 @@
   }
   float();
 
-  // Modal
   function openModal(deg) {
     document.getElementById('modalName').textContent = deg.name;
     document.getElementById('modalType').textContent = deg.type;
