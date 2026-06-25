@@ -33,17 +33,24 @@
     }
 
     /* Custom cursor */
-    #cursor {
+        #starCursor {
       position: fixed;
-      width: 10px; height: 10px;
-      background: var(--olive);
-      border-radius: 50%;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.12s ease, background 0.2s;
+      background: transparent;
     }
-    body:hover #cursor { opacity: 1; }
+    body:hover     #starCursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      background: transparent;
+    }
 
     /* Nav dock */
     nav {
@@ -131,7 +138,7 @@
 
     h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-size: clamp(2.4rem, 9vw, 3.4rem);
       font-weight: 600;
       letter-spacing: -0.01em;
       line-height: 1.1;
@@ -140,7 +147,7 @@
     .tagline {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       color: var(--muted);
       max-width: 300px;
       line-height: 1.5;
@@ -148,7 +155,7 @@
 
     /* Typed text */
     .typed-wrap {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--olive);
@@ -211,7 +218,7 @@
       font-weight: 500;
     }
     .contact-value {
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 400;
       color: var(--olive);
     }
@@ -222,7 +229,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      font-size: 0.8rem;
+      font-size: 0.92rem;
       color: var(--muted);
       letter-spacing: 0.06em;
     }
@@ -276,7 +283,7 @@
     .play-btn svg { margin-left: 4px; }
     .video-caption {
       color: var(--cream);
-      font-size: 0.82rem;
+      font-size: 0.95rem;
       opacity: 0.7;
       position: relative;
       z-index: 1;
@@ -284,45 +291,11 @@
     }
     .video-meta {
       padding: 14px 16px;
-      font-size: 0.82rem;
+      font-size: 0.95rem;
       color: var(--muted);
     }
 
-    /* QR section */
-    .qr-section {
-      background: var(--cream);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 4px 20px rgba(61,74,46,0.08);
-      animation: fadeUp 0.8s 0.55s ease both;
-    }
-    .qr-box {
-      width: 100px; height: 100px;
-      border: 2px dashed var(--gold);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--muted);
-      font-size: 11px;
-      text-align: center;
-      line-height: 1.4;
-      padding: 8px;
-    }
-    .qr-caption {
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-align: center;
-      letter-spacing: 0.06em;
-    }
-    .qr-url {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.95rem;
-      color: var(--olive);
-      font-weight: 600;
-    }
+
 
     /* Section headings */
     .section-eyebrow {
@@ -343,7 +316,7 @@
 </head>
 <body>
 
-<div id="cursor"></div>
+<canvas id="starCursor"></canvas>
 
 <!-- Nav Dock -->
 <nav>
@@ -418,13 +391,6 @@
 </main>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-
   // Typed text
   const words = ['Finance', 'Marketing', 'Strategy', 'Controlling', 'Innovation'];
   // all words styled identically via CSS
@@ -439,6 +405,53 @@
     setTimeout(type, delay);
   }
   type();
+
+
+  // Shooting star cursor (desktop only)
+  if (window.matchMedia("(pointer: fine)").matches) {
+    const canvas = document.getElementById("starCursor");
+    const ctx = canvas.getContext("2d");
+    let CW, CH;
+    function resize() { CW = canvas.width = window.innerWidth; CH = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener("resize", resize);
+    document.body.style.cursor = "none";
+    let mx = -200, my = -200, moving = false, moveTimer;
+    const trail = [];
+    document.addEventListener("mousemove", e => {
+      mx = e.clientX; my = e.clientY; moving = true;
+      trail.push({ x: mx, y: my });
+      if (trail.length > 24) trail.shift();
+      clearTimeout(moveTimer); moveTimer = setTimeout(() => { moving = false; }, 80);
+    });
+    function drawStar(x, y, r, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 10;
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) { const oa=(i*4*Math.PI)/5-Math.PI/2, ia=oa+Math.PI/5; if(i===0) ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia)); }
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    function drawSparkle(x, y, r, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 14; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 4; i++) { const a=(i*Math.PI)/4; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3); ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.stroke(); }
+      ctx.restore();
+    }
+    let sr = 6, sd = 1;
+    function render() {
+      ctx.clearRect(0, 0, CW, CH);
+      if (moving && trail.length > 1) {
+        for (let i = 1; i < trail.length; i++) {
+          const t = i/trail.length, p = trail[i], pp = trail[i-1];
+          ctx.save(); ctx.strokeStyle="#FFD700"; ctx.shadowColor="#FFD700"; ctx.shadowBlur=10; ctx.globalAlpha=t*0.65; ctx.lineWidth=t*3.5; ctx.lineCap="round";
+          ctx.beginPath(); ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.restore();
+          if (i%5===0) drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);
+        }
+      }
+      if (!moving) { sr+=sd*0.07; if(sr>9||sr<5) sd*=-1; drawStar(mx,my,sr,1); drawSparkle(mx,my,sr+7,0.55); }
+      else drawStar(mx,my,5,1);
+      requestAnimationFrame(render);
+    }
+    render();
+  }
+
 </script>
 </body>
 </html>

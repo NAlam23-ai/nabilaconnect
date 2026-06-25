@@ -30,15 +30,14 @@
       cursor: none;
     }
 
-    #cursor {
+        #starCursor {
       position: fixed;
-      width: 10px; height: 10px;
-      background: var(--olive);
-      border-radius: 50%;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.12s ease;
+      background: transparent;
     }
 
     /* Nav dock */
@@ -75,12 +74,12 @@
     }
     .page-header h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 7vw, 2.4rem);
+      font-size: clamp(2.2rem, 8vw, 3rem);
       font-weight: 600;
       letter-spacing: -0.01em;
     }
     .page-header p {
-      font-size: 0.82rem;
+      font-size: 0.95rem;
       color: var(--muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -155,7 +154,7 @@
     /* Tap hint */
     .tap-hint {
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       color: var(--muted);
       letter-spacing: 0.08em;
       padding: 8px 0 100px;
@@ -219,19 +218,19 @@
     }
     .modal-title h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
+      font-size: 1.45rem;
       font-weight: 600;
       line-height: 1.2;
     }
     .modal-title .role {
-      font-size: 0.8rem;
+      font-size: 0.92rem;
       color: var(--gold);
       font-weight: 500;
       letter-spacing: 0.04em;
       margin-top: 2px;
     }
     .modal-title .meta {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       color: var(--muted);
       margin-top: 2px;
     }
@@ -251,7 +250,7 @@
     .modal-responsibilities li {
       display: flex;
       gap: 10px;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       line-height: 1.55;
       color: var(--olive);
     }
@@ -285,7 +284,7 @@
 </head>
 <body>
 
-<div id="cursor"></div>
+<canvas id="starCursor"></canvas>
 
 <nav>
   <a href="index.html" title="Home">🏠</a>
@@ -324,13 +323,6 @@
 </div>
 
 <script>
-  // Cursor
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-
   // Company data
   const companies = [
     {
@@ -558,6 +550,53 @@
     b.x = Math.min(b.x, W() - SIZE - PADDING);
     b.y = Math.min(b.y, H() - SIZE - PADDING);
   }); });
+
+
+  // Shooting star cursor (desktop only)
+  if (window.matchMedia("(pointer: fine)").matches) {
+    const canvas = document.getElementById("starCursor");
+    const ctx = canvas.getContext("2d");
+    let CW, CH;
+    function resize() { CW = canvas.width = window.innerWidth; CH = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener("resize", resize);
+    document.body.style.cursor = "none";
+    let mx = -200, my = -200, moving = false, moveTimer;
+    const trail = [];
+    document.addEventListener("mousemove", e => {
+      mx = e.clientX; my = e.clientY; moving = true;
+      trail.push({ x: mx, y: my });
+      if (trail.length > 24) trail.shift();
+      clearTimeout(moveTimer); moveTimer = setTimeout(() => { moving = false; }, 80);
+    });
+    function drawStar(x, y, r, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 10;
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) { const oa=(i*4*Math.PI)/5-Math.PI/2, ia=oa+Math.PI/5; if(i===0) ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia)); }
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    function drawSparkle(x, y, r, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 14; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 4; i++) { const a=(i*Math.PI)/4; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3); ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.stroke(); }
+      ctx.restore();
+    }
+    let sr = 6, sd = 1;
+    function render() {
+      ctx.clearRect(0, 0, CW, CH);
+      if (moving && trail.length > 1) {
+        for (let i = 1; i < trail.length; i++) {
+          const t = i/trail.length, p = trail[i], pp = trail[i-1];
+          ctx.save(); ctx.strokeStyle="#FFD700"; ctx.shadowColor="#FFD700"; ctx.shadowBlur=10; ctx.globalAlpha=t*0.65; ctx.lineWidth=t*3.5; ctx.lineCap="round";
+          ctx.beginPath(); ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.restore();
+          if (i%5===0) drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);
+        }
+      }
+      if (!moving) { sr+=sd*0.07; if(sr>9||sr<5) sd*=-1; drawStar(mx,my,sr,1); drawSparkle(mx,my,sr+7,0.55); }
+      else drawStar(mx,my,5,1);
+      requestAnimationFrame(render);
+    }
+    render();
+  }
+
 </script>
 </body>
 </html>
