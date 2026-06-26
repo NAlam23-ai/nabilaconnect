@@ -11,85 +11,46 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sage:    #c8dba8;
-      --sage-dk: #a8c485;
-      --olive:   #3d4a2e;
-      --cream:   #f5f0e8;
-      --gold:    #c9a84c;
-      --muted:   #6b7a57;
+      --sage:  #c8dba8;
+      --olive: #3d4a2e;
+      --cream: #f5f0e8;
+      --gold:  #c9a84c;
+      --muted: #6b7a57;
     }
 
-    html { scroll-behavior: smooth; }
-
     html { background: #c8dba8; }
-
     body {
       background: #c8dba8;
       color: var(--olive);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       min-height: 100vh;
-      cursor: none;
     }
 
-    /* Custom cursor */
-        #starCursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-      background: transparent;
-    }
-    body:hover     #starCursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
+    #starCursor {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 9999;
       background: transparent;
     }
 
-    /* Nav dock */
+    /* Nav */
     nav {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 20px;
-      background: rgba(61,74,46,0.88);
-      backdrop-filter: blur(10px);
-      padding: 12px 24px;
-      border-radius: 40px;
-      z-index: 100;
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 20px;
+      background: rgba(61,74,46,0.88); backdrop-filter: blur(10px);
+      padding: 12px 24px; border-radius: 40px; z-index: 100;
     }
     nav a {
-      color: var(--cream);
-      text-decoration: none;
-      font-size: 18px;
-      line-height: 1;
+      color: var(--cream); text-decoration: none; font-size: 18px;
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
       transition: transform 0.2s, color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px; height: 36px;
     }
     nav a:hover { transform: scale(1.25); color: var(--gold); }
     nav a.active { color: var(--gold); }
-    nav span.nav-label {
-      color: var(--cream);
-      font-size: 11px;
-      letter-spacing: 0.05em;
-      font-family: 'DM Sans', sans-serif;
-      opacity: 0.7;
-      display: flex;
-      align-items: center;
-    }
+    nav span { color: rgba(245,240,232,0.3); display: flex; align-items: center; font-size: 12px; }
 
-    /* Page layout */
+    /* Main */
     main {
       max-width: 480px;
       margin: 0 auto;
@@ -99,10 +60,8 @@
     /* Hero */
     .hero {
       padding-top: 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
       gap: 20px;
       animation: fadeUp 0.8s ease both;
     }
@@ -113,214 +72,129 @@
     }
 
     .photo-wrap {
-      position: relative;
-      width: 130px; height: 130px;
+      position: relative; width: 130px; height: 130px;
     }
     .photo-wrap::before {
-      content: '';
-      position: absolute;
-      inset: -5px;
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      opacity: 0.6;
-      animation: spin 18s linear infinite;
+      content: ''; position: absolute; inset: -5px;
+      border-radius: 50%; border: 2px solid var(--gold);
+      opacity: 0.6; animation: spin 18s linear infinite;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .photo-wrap img {
-      width: 130px; height: 130px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
+      width: 130px; height: 130px; border-radius: 50%;
+      object-fit: cover; object-position: top center; display: block;
     }
 
     h1 {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.4rem, 9vw, 3.4rem);
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
+      font-weight: 600; letter-spacing: -0.01em; line-height: 1.1;
     }
 
-
+    .divider {
+      width: 48px; height: 1px;
+      background: var(--gold); margin: 8px auto; opacity: 0.6;
+    }
 
     .objective-text {
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      line-height: 1.75;
-      color: var(--muted);
-      max-width: 340px;
-      text-align: center;
-      font-weight: 300;
+      font-size: 0.95rem; line-height: 1.75;
+      color: var(--muted); max-width: 340px;
+      text-align: center; font-weight: 300;
     }
 
-    /* Typed text */
+    /* Typed */
     .typed-wrap {
-      font-size: 0.95rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--olive);
-      opacity: 0.7;
-      min-height: 1.4em;
+      font-size: 0.85rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--olive);
+      opacity: 0.7; min-height: 1.4em;
     }
     .typed-wrap span { border-right: 2px solid var(--gold); padding-right: 2px; }
 
-    /* Divider */
-    .divider {
-      width: 48px;
-      height: 1px;
-      background: var(--gold);
-      margin: 8px auto;
-      opacity: 0.6;
+    /* Section eyebrow */
+    .section-eyebrow {
+      font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      font-weight: 500; text-align: center;
+      width: 100%; display: block;
+      margin-top: 40px; margin-bottom: 16px;
     }
 
-
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 100%;
+    /* Contact */
+    .contact {
+      display: flex; flex-direction: column;
+      gap: 14px; width: 100%;
       animation: fadeUp 0.8s 0.25s ease both;
     }
-
     .contact-card {
-      background: var(--cream);
-      border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-decoration: none;
-      color: var(--olive);
+      background: rgba(245,240,232,0.92);
+      border-radius: 16px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: var(--olive);
       transition: transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 2px 12px rgba(61,74,46,0.08);
     }
-    .contact-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(61,74,46,0.14);
-    }
+    .contact-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(61,74,46,0.14); }
     .contact-icon {
-      width: 40px; height: 40px;
-      background: var(--sage);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      font-size: 18px;
+      width: 40px; height: 40px; background: var(--sage);
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; font-size: 18px;
     }
-    .contact-text {
-      display: flex;
-      flex-direction: column;
-    }
+    .contact-text { display: flex; flex-direction: column; }
     .contact-label {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 500;
+      font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); font-weight: 500;
     }
-    .contact-value {
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--olive);
-    }
+    .contact-value { font-size: 1rem; font-weight: 400; color: var(--olive); }
 
-    /* Location */
-    .location {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 0.92rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-    }
-
-    /* Video section */
+    /* Video */
     .video-section {
-      width: 100%;
-      background: var(--cream);
-      border-radius: 20px;
-      overflow: hidden;
+      width: 100%; background: rgba(245,240,232,0.92);
+      border-radius: 20px; overflow: hidden;
       box-shadow: 0 4px 20px rgba(61,74,46,0.10);
-      position: relative;
-      animation: fadeUp 0.8s 0.4s ease both;
+      position: relative; animation: fadeUp 0.8s 0.4s ease both;
     }
     .video-thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
+      width: 100%; aspect-ratio: 16/9;
       background: linear-gradient(135deg, var(--olive) 0%, var(--muted) 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      position: relative; overflow: hidden;
     }
     .video-thumb::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        -45deg,
-        rgba(255,255,255,0.03) 0px,
-        rgba(255,255,255,0.03) 1px,
-        transparent 1px,
-        transparent 8px
-      );
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 8px);
     }
     .play-btn {
-      width: 56px; height: 56px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      border: none;
-      transition: transform 0.2s, opacity 0.2s;
-      position: relative;
-      z-index: 1;
+      width: 56px; height: 56px; background: var(--gold);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; border: none;
+      transition: transform 0.2s; position: relative; z-index: 1;
     }
     .play-btn:hover { transform: scale(1.08); }
     .play-btn svg { margin-left: 4px; }
     .video-caption {
-      color: var(--cream);
-      font-size: 0.95rem;
-      opacity: 0.7;
-      position: relative;
-      z-index: 1;
-      letter-spacing: 0.05em;
+      color: var(--cream); font-size: 0.95rem; opacity: 0.7;
+      position: relative; z-index: 1; letter-spacing: 0.05em;
     }
-    .video-meta {
-      padding: 14px 16px;
-      font-size: 0.95rem;
-      color: var(--muted);
-    }
-
-
-
-
-
-
-
+    .video-meta { padding: 14px 16px; font-size: 0.95rem; color: var(--muted); }
+  </style>
 </head>
 <body>
 
 <canvas id="starCursor"></canvas>
 
-<!-- Nav Dock -->
 <nav>
   <a href="index.html" class="active" title="Home">🏠</a>
-  <span class="nav-label">&nbsp;</span>
+  <span>|</span>
   <a href="experience.html" title="Experience">💼</a>
-  <span class="nav-label">&nbsp;</span>
+  <span>|</span>
   <a href="education.html" title="Education">🎓</a>
-  <span class="nav-label">&nbsp;</span>
+  <span>|</span>
   <a href="skills.html" title="Skills">✨</a>
 </nav>
 
 <main>
-  <!-- Hero -->
   <section class="hero">
     <div class="photo-wrap">
       <img src="nabila-photo.jpg" alt="Nabila Alam" />
@@ -334,7 +208,8 @@
       <span id="typed-text"></span>
     </div>
   </section>
-<p class="section-eyebrow" style="margin-top: 36px;">Get in Touch</p>
+
+  <p class="section-eyebrow">Get in Touch</p>
   <div class="contact">
     <a class="contact-card" href="mailto:nabial.connect@gmail.com">
       <div class="contact-icon">✉️</div>
@@ -343,7 +218,6 @@
         <span class="contact-value">nabial.connect@gmail.com</span>
       </div>
     </a>
-
     <a class="contact-card" href="https://www.linkedin.com/in/nabila-alam-a705b4130" target="_blank" rel="noopener">
       <div class="contact-icon">💼</div>
       <div class="contact-text">
@@ -351,7 +225,6 @@
         <span class="contact-value">nabila-alam-a705b4130</span>
       </div>
     </a>
-
     <div class="contact-card" style="cursor:default;">
       <div class="contact-icon">📍</div>
       <div class="contact-text">
@@ -361,7 +234,6 @@
     </div>
   </div>
 
-  <!-- Video -->
   <p class="section-eyebrow">Introduction</p>
   <div class="video-section">
     <div class="video-thumb">
@@ -374,14 +246,11 @@
     </div>
     <p class="video-meta">Meet Nabila — a finance and marketing professional bridging numbers and narratives. Coming soon.</p>
   </div>
-
-
 </main>
 
 <script>
   // Typed text
   const words = ['Finance', 'Marketing', 'Strategy', 'Innovation'];
-  // all words styled identically via CSS
   let wi = 0, ci = 0, deleting = false;
   const el = document.getElementById('typed-text');
   function type() {
@@ -389,11 +258,10 @@
     el.textContent = deleting ? word.slice(0, --ci) : word.slice(0, ++ci);
     let delay = deleting ? 60 : 100;
     if (!deleting && ci === word.length) { delay = 1600; deleting = true; }
-    else if (deleting && ci === 0)       { deleting = false; wi = (wi + 1) % words.length; delay = 400; }
+    else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; delay = 400; }
     setTimeout(type, delay);
   }
   type();
-
 
   // Shooting star cursor (desktop only)
   if (window.matchMedia("(pointer: fine)").matches) {
@@ -412,14 +280,24 @@
       clearTimeout(moveTimer); moveTimer = setTimeout(() => { moving = false; }, 80);
     });
     function drawStar(x, y, r, alpha) {
-      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 10;
-      ctx.beginPath();
-      for (let i = 0; i < 5; i++) { const oa=(i*4*Math.PI)/5-Math.PI/2, ia=oa+Math.PI/5; if(i===0) ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia)); }
+      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = "#FFD700";
+      ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 10; ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        const oa = (i*4*Math.PI)/5-Math.PI/2, ia = oa+Math.PI/5;
+        if (i===0) ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa));
+        else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa));
+        ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia));
+      }
       ctx.closePath(); ctx.fill(); ctx.restore();
     }
     function drawSparkle(x, y, r, alpha) {
-      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 14; ctx.lineWidth = 1.5;
-      for (let i = 0; i < 4; i++) { const a=(i*Math.PI)/4; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3); ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.stroke(); }
+      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = "#FFD700";
+      ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 14; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 4; i++) {
+        const a = (i*Math.PI)/4; ctx.beginPath();
+        ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3);
+        ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.stroke();
+      }
       ctx.restore();
     }
     let sr = 6, sd = 1;
@@ -428,8 +306,10 @@
       if (moving && trail.length > 1) {
         for (let i = 1; i < trail.length; i++) {
           const t = i/trail.length, p = trail[i], pp = trail[i-1];
-          ctx.save(); ctx.strokeStyle="#FFD700"; ctx.shadowColor="#FFD700"; ctx.shadowBlur=10; ctx.globalAlpha=t*0.65; ctx.lineWidth=t*3.5; ctx.lineCap="round";
-          ctx.beginPath(); ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.restore();
+          ctx.save(); ctx.strokeStyle="#FFD700"; ctx.shadowColor="#FFD700";
+          ctx.shadowBlur=10; ctx.globalAlpha=t*0.65; ctx.lineWidth=t*3.5;
+          ctx.lineCap="round"; ctx.beginPath();
+          ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.restore();
           if (i%5===0) drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);
         }
       }
@@ -440,15 +320,11 @@
     render();
   }
 
-
   // Swipe navigation
   (function() {
     const prev = 'skills.html', next = 'experience.html';
     let startX = 0, startY = 0;
-    document.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }, { passive: true });
+    document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
     document.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - startX;
       const dy = e.changedTouches[0].clientY - startY;
@@ -457,13 +333,11 @@
         else window.location.href = prev;
       }
     }, { passive: true });
-    // Arrow keys for laptop
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight') window.location.href = next;
       if (e.key === 'ArrowLeft') window.location.href = prev;
     });
   })();
-
 </script>
 </body>
 </html>
