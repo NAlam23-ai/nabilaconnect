@@ -36,10 +36,10 @@
     .animal-wrap:hover { z-index: 10; }
 
 
-    .animal-circle { width: 110px; height: 110px; border-radius: 50%; background: transparent; box-shadow: none; border: 2px solid rgba(201,168,76,0.35); display: flex; align-items: center; justify-content: center; overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; animation: bounce var(--bounce-dur) var(--bounce-delay) ease-in-out infinite alternate; }
+    .animal-circle { width: 120px; height: 120px; border-radius: 50%; background: transparent; border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; animation: bounce var(--bounce-dur) var(--bounce-delay) ease-in-out infinite alternate; box-shadow: 0 0 12px rgba(201,168,76,0.3); }
     .animal-wrap:hover .animal-circle { box-shadow: 0 8px 28px rgba(42,61,48,0.28); border-color: var(--gold); }
     @keyframes bounce { from { transform:translateY(0px); } to { transform:translateY(-9px); } }
-    .animal-circle img { width: 88%; height: 88%; object-fit: contain; }
+    .animal-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
     .animal-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--olive); font-weight: 500; text-align: center; background: rgba(245,240,232,0.75); border-radius: 8px; padding: 2px 8px; white-space: nowrap; }
 
@@ -117,10 +117,10 @@
   }
 
   const degrees = [
-    { label:"MA Int'l Marketing", animal:'animal-panda.png', name:'International Marketing', type:'Master of Arts · Pursuing', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2023 – Present', logo:'logo-thn.png', fallback:'THN', courses:['International Market Research','Cross-Cultural Marketing','Python & SPSS','Web Design Basics','Product & Market Development','Business Ethics','Strategic Management','Sponsorship-Linked Marketing'] },
-    { label:"MSc Int'l Finance", animal:'animal-dog.png', name:'International Finance & Economics', type:'Master of Science · 2023', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2020 – 2023', logo:'logo-thn.png', fallback:'THN', courses:['Mergers & Acquisitions','Venture Capital','Equity & Bond Investments','Economics of Emerging Markets','Corporate Valuation','Global Financial Institutions & Investment Banking','International Economics','Behavioural Economics'] },
-    { label:'MBA Banking', animal:'animal-elephant.png', name:'Finance & Banking', type:'MBA · 2015', uni:'University of Chittagong, Bangladesh', year:'2013 – 2015', logo:'logo-cu.png', fallback:'CU', courses:['Bank Fund Management','Portfolio Management','Public Finance & Taxation','Organisational Behaviour','Marketing Management','Supply Chain Management'] },
-    { label:'BBA Finance', animal:'animal-owl.png', name:'Finance & Accounting', type:'BBA · 2013', uni:'Independent University, Bangladesh', year:'2009 – 2013', logo:'logo-iub.png', fallback:'IUB', courses:['International Finance','Product & Operations Management','Business Law','Auditing','Investment Management','Cost Accounting','Micro & Macro Economics'] }
+    { label:"MA Int'l Marketing", animal:'animal-panda.jpeg', name:'International Marketing', type:'Master of Arts · Pursuing', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2023 – Present', logo:'logo-thn.png', fallback:'THN', courses:['International Market Research','Cross-Cultural Marketing','Python & SPSS','Web Design Basics','Product & Market Development','Business Ethics','Strategic Management','Sponsorship-Linked Marketing'] },
+    { label:"MSc Int'l Finance", animal:'animal-dog.jpeg', name:'International Finance & Economics', type:'Master of Science · 2023', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2020 – 2023', logo:'logo-thn.png', fallback:'THN', courses:['Mergers & Acquisitions','Venture Capital','Equity & Bond Investments','Economics of Emerging Markets','Corporate Valuation','Global Financial Institutions & Investment Banking','International Economics','Behavioural Economics'] },
+    { label:'MBA Banking', animal:'animal-elephant.jpeg', name:'Finance & Banking', type:'MBA · 2015', uni:'University of Chittagong, Bangladesh', year:'2013 – 2015', logo:'logo-cu.png', fallback:'CU', courses:['Bank Fund Management','Portfolio Management','Public Finance & Taxation','Organisational Behaviour','Marketing Management','Supply Chain Management'] },
+    { label:'BBA Finance', animal:'animal-owl.jpeg', name:'Finance & Accounting', type:'BBA · 2013', uni:'Independent University, Bangladesh', year:'2009 – 2013', logo:'logo-iub.png', fallback:'IUB', courses:['International Finance','Product & Operations Management','Business Law','Auditing','Investment Management','Cost Accounting','Micro & Macro Economics'] }
   ];
 
   const arena = document.getElementById('arena');
