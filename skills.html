@@ -103,16 +103,7 @@
       50%      { transform: rotate(4deg) translateY(-6px); }
     }
 
-    /* Balloon shine */
-    .balloon::before {
-      content: '';
-      position: absolute;
-      top: 12px; left: 16px;
-      width: 18px; height: 24px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 50%;
-      transform: rotate(-30deg);
-    }
+
 
     /* Balloon knot */
     .balloon::after {
@@ -196,6 +187,8 @@
     .modal-divider { height: 1px; background: rgba(58,74,32,0.1); margin: 14px 0; }
 
     .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skills-grid.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    @media (max-width: 400px) { .skills-grid.three-col { grid-template-columns: repeat(2, 1fr); } }
     .skill-pill {
       padding: 7px 14px; border-radius: 20px;
       font-size: 0.88rem; color: var(--olive);
@@ -322,19 +315,36 @@
         'Web Design Basics',
         'Stakeholder & Vendor Management'
       ]
+    },
+    {
+      title: 'Curious by Nature',
+      sub: '24 interests & passions',
+      icon: '🌍',
+      color: '#7a6a9a',
+      pillBg: 'rgba(122,106,154,0.2)',
+      skills: [
+        'Travelling','Experiencing Life','Photography','Skydiving',
+        'Geopolitics','Designing Clothes','Philosophy','Cooking',
+        'Meeting New People','Styling','Mathematics','Art & Exhibitions',
+        'Astronomy','Fashion & Trends','Physics','Storytelling & Narratives',
+        'Linguistics & Literature','Conscious Living','Digital Creativity',
+        'Movies & Film','Cultural Exploration','Shopping & Interior Curation',
+        'Listening to Music','Finding Flow in Repetition'
+      ]
     }
   ];
 
   const arena = document.getElementById('arena');
-  const SZ = 120, PAD = 16;
+  const SZ = 110, PAD = 12;
   const W = () => arena.clientWidth;
   const H = () => arena.clientHeight;
 
   const positions = [
-    { x: 0.07, y: 0.05 },
-    { x: 0.55, y: 0.03 },
-    { x: 0.10, y: 0.50 },
-    { x: 0.58, y: 0.48 }
+    { x: 0.04, y: 0.03 },
+    { x: 0.54, y: 0.01 },
+    { x: 0.04, y: 0.50 },
+    { x: 0.54, y: 0.48 },
+    { x: 0.28, y: 0.26 }
   ];
 
   const state = [];
