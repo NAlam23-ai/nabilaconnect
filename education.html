@@ -9,73 +9,94 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #a8c4b8; --olive: #2a3d30; --cream: #f5f0e8; --gold: #c9a84c; --muted: #4a6358; }
-    html { background: #a8c4b8; }
-    body { background: #a8c4b8; color: var(--olive); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+    :root { --bg: #f0d4d0; --olive: #3d4a2e; --cream: #f5f0e8; --gold: #c9a84c; --muted: #7a6a5a; }
+    html { background: #f0d4d0; }
+    body { background: #f0d4d0; color: var(--olive); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
 
     #starCursor { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; background: transparent; }
 
-    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .star { position: absolute; border-radius: 50%; background: white; opacity: 0; animation: twinkle var(--dur) var(--delay) infinite; }
-    @keyframes twinkle { 0%,100% { opacity:0; transform:scale(0.5); } 50% { opacity:var(--op); transform:scale(1); } }
-
-    nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; background: rgba(26,46,36,0.88); backdrop-filter: blur(10px); padding: 12px 24px; border-radius: 40px; z-index: 100; }
-    nav a { color: var(--cream); text-decoration: none; font-size: 18px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, color 0.2s; }
+    nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; background: rgba(61,74,46,0.88); backdrop-filter: blur(10px); padding: 12px 24px; border-radius: 40px; z-index: 100; }
+    nav a { color: #f5f0e8; text-decoration: none; font-size: 18px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, color 0.2s; }
     nav a:hover { transform: scale(1.25); color: var(--gold); }
     nav a.active { color: var(--gold); }
     nav span { color: rgba(245,240,232,0.2); display: flex; align-items: center; font-size: 12px; }
 
-    .page-header { position: relative; z-index: 1; text-align: center; padding: 52px 24px 8px; animation: flyIn 0.6s ease both; }
+    .page-header { text-align: center; padding: 52px 24px 8px; animation: fadeUp 0.6s ease both; }
     .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 8vw, 3rem); font-weight: 600; }
-    .page-header p { font-size: 0.95rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
-    @keyframes flyIn { from { opacity:0; transform:translateX(-40px); } to { opacity:1; transform:translateX(0); } }
+    .page-header p { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-    #arena { position: relative; z-index: 1; width: 100%; height: calc(100vh - 240px); min-height: 340px; max-height: 560px; overflow: hidden; }
+    /* Staircase */
+    .staircase {
+      padding: 24px 16px 120px;
+      display: flex; flex-direction: column; gap: 0;
+    }
 
-    .animal-wrap { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; opacity: 0; transition: opacity 0.5s; }
-    .animal-wrap:hover { z-index: 10; }
+    .step {
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer;
+      padding: 12px 0;
+      animation: fadeUp 0.5s ease both;
+    }
+    .step:nth-child(1) { margin-left: 0;    animation-delay: 0.05s; }
+    .step:nth-child(2) { margin-left: 40px;  animation-delay: 0.15s; }
+    .step:nth-child(3) { margin-left: 80px;  animation-delay: 0.25s; }
+    .step:nth-child(4) { margin-left: 120px; animation-delay: 0.35s; }
 
+    .step-connector {
+      width: 2px; height: 28px;
+      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.2));
+      margin-left: 54px;
+    }
+    .step:nth-child(2) + .step-connector,
+    .step-connector:nth-child(2) { margin-left: 94px; }
+    .step:nth-child(3) + .step-connector { margin-left: 134px; }
 
-    .animal-circle { width: 120px; height: 120px; border-radius: 50%; background: transparent; border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; animation: bounce var(--bounce-dur) var(--bounce-delay) ease-in-out infinite alternate; box-shadow: 0 0 12px rgba(201,168,76,0.3); }
-    .animal-wrap:hover .animal-circle { box-shadow: 0 8px 28px rgba(42,61,48,0.28); border-color: var(--gold); }
-    @keyframes bounce { from { transform:translateY(0px); } to { transform:translateY(-9px); } }
+    .animal-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 2.5px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+      box-shadow: 0 3px 12px rgba(201,168,76,0.25);
+      transition: box-shadow 0.2s, transform 0.2s;
+      background: white;
+    }
+    .step:hover .animal-circle {
+      box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+      transform: scale(1.05);
+    }
     .animal-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-    .animal-label { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--olive); font-weight: 500; text-align: center; background: rgba(245,240,232,0.75); border-radius: 8px; padding: 2px 8px; white-space: nowrap; }
+    .step-info { flex: 1; }
+    .step-tag { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .step-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--olive); line-height: 1.2; margin-top: 2px; }
+    .step-uni { font-size: 0.72rem; color: var(--muted); margin-top: 2px; line-height: 1.3; }
 
-    .tap-hint { position: relative; z-index: 1; text-align: center; font-size: 0.85rem; color: var(--muted); letter-spacing: 0.08em; padding-bottom: 8px; animation: flyIn 0.6s 0.8s ease both; }
-
-    .modal-overlay { position: fixed; inset: 0; background: rgba(26,46,36,0.5); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(61,74,46,0.45); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
     .modal { background: var(--cream); border-radius: 24px 24px 0 0; width: 100%; max-width: 520px; max-height: 82vh; overflow-y: auto; padding: 28px 24px 130px; transform: translateY(100%); transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1); }
     .modal-overlay.open .modal { transform: translateY(0); }
     .modal-top { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-    .modal-logo { width: 60px; height: 48px; flex-shrink: 0; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(42,61,48,0.1); padding: 8px; overflow: hidden; }
-    .modal-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .modal-logo .initials { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--olive); text-align: center; }
-    .modal-title h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; line-height: 1.2; }
-    .modal-title .degree-type { font-size: 0.85rem; color: var(--gold); font-weight: 500; margin-top: 2px; }
-    .modal-title .degree-uni { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
-    .modal-title .degree-year { font-size: 0.82rem; color: var(--gold); margin-top: 3px; letter-spacing: 0.05em; }
-    .modal-divider { height: 1px; background: rgba(42,61,48,0.1); margin: 14px 0; }
-    .courses-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .modal-animal { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; flex-shrink: 0; background: white; }
+    .modal-animal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .modal-title h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600; line-height: 1.2; }
+    .modal-title .degree-type { font-size: 0.8rem; color: var(--gold); font-weight: 500; margin-top: 2px; }
+    .modal-title .degree-uni { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .modal-title .degree-year { font-size: 0.75rem; color: var(--gold); margin-top: 3px; }
+    .modal-divider { height: 1px; background: rgba(61,74,46,0.1); margin: 14px 0; }
+    .courses-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .courses-list { display: flex; flex-wrap: wrap; gap: 7px; }
-    .course-pill { background: rgba(168,196,184,0.35); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; color: var(--olive); }
-    .modal-close { position: absolute; top: 16px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: rgba(42,61,48,0.08); border: none; cursor: pointer; font-size: 16px; color: var(--olive); display: flex; align-items: center; justify-content: center; }
+    .course-pill { background: rgba(240,212,208,0.5); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 5px 12px; font-size: 0.82rem; color: var(--olive); }
+    .modal-close { position: absolute; top: 16px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: rgba(61,74,46,0.08); border: none; cursor: pointer; font-size: 16px; color: var(--olive); display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
-
 <canvas id="starCursor"></canvas>
-<div id="stars"></div>
-
 <nav>
-  <a href="index.html" title="Home">🏠</a>
-  <span>|</span>
-  <a href="experience.html" title="Experience">💼</a>
-  <span>|</span>
-  <a href="education.html" class="active" title="Education">🎓</a>
-  <span>|</span>
+  <a href="index.html" title="Home">🏠</a><span>|</span>
+  <a href="experience.html" title="Experience">💼</a><span>|</span>
+  <a href="education.html" class="active" title="Education">🎓</a><span>|</span>
   <a href="skills.html" title="Skills">✨</a>
 </nav>
 
@@ -84,14 +105,14 @@
   <p>Tap an animal to explore each degree</p>
 </div>
 
-<div id="arena"></div>
-<p class="tap-hint">tap any animal to see details</p>
+<div class="staircase" id="staircase"></div>
 
+<!-- Modal -->
 <div class="modal-overlay" id="overlay">
-  <div class="modal" id="modal">
+  <div class="modal">
     <button class="modal-close" id="closeBtn">✕</button>
     <div class="modal-top">
-      <div class="modal-logo" id="modalLogo"></div>
+      <div class="modal-animal" id="modalAnimal"></div>
       <div class="modal-title">
         <h2 id="modalName"></h2>
         <div class="degree-type" id="modalType"></div>
@@ -106,80 +127,58 @@
 </div>
 
 <script>
-  // Stars
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 55; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const sz = Math.random() * 2.5 + 1;
-    s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--op:${0.12+Math.random()*0.25};`;
-    starsEl.appendChild(s);
-  }
-
   const degrees = [
-    { label:"MA Int'l Marketing", animal:'animal-panda.jpeg', name:'International Marketing', type:'Master of Arts · Pursuing', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2023 – Present', logo:'logo-thn.png', fallback:'THN', courses:['International Market Research','Cross-Cultural Marketing','Python & SPSS','Web Design Basics','Product & Market Development','Business Ethics','Strategic Management','Sponsorship-Linked Marketing'] },
-    { label:"MSc Int'l Finance", animal:'animal-dog.jpeg', name:'International Finance & Economics', type:'Master of Science · 2023', uni:'Technische Hochschule Nürnberg Georg Simon Ohm, Germany', year:'2020 – 2023', logo:'logo-thn.png', fallback:'THN', courses:['Mergers & Acquisitions','Venture Capital','Equity & Bond Investments','Economics of Emerging Markets','Corporate Valuation','Global Financial Institutions & Investment Banking','International Economics','Behavioural Economics'] },
-    { label:'MBA Banking', animal:'animal-elephant.jpeg', name:'Finance & Banking', type:'MBA · 2015', uni:'University of Chittagong, Bangladesh', year:'2013 – 2015', logo:'logo-cu.png', fallback:'CU', courses:['Bank Fund Management','Portfolio Management','Public Finance & Taxation','Organisational Behaviour','Marketing Management','Supply Chain Management'] },
-    { label:'BBA Finance', animal:'animal-owl.jpeg', name:'Finance & Accounting', type:'BBA · 2013', uni:'Independent University, Bangladesh', year:'2009 – 2013', logo:'logo-iub.png', fallback:'IUB', courses:['International Finance','Product & Operations Management','Business Law','Auditing','Investment Management','Cost Accounting','Micro & Macro Economics'] }
+    { label:"MA Int'l Marketing", animal:'animal-panda.jpeg', name:'International Marketing', type:'Master of Arts · Pursuing', uni:'TH Nürnberg Georg Simon Ohm, Germany', year:'2023 – Present',
+      courses:['International Market Research','Cross-Cultural Marketing','Python & SPSS','Web Design Basics','Product & Market Development','Business Ethics','Strategic Management','Sponsorship-Linked Marketing'] },
+    { label:"MSc Int'l Finance", animal:'animal-dog.jpeg', name:'International Finance & Economics', type:'Master of Science · 2023', uni:'TH Nürnberg Georg Simon Ohm, Germany', year:'2020 – 2023',
+      courses:['Mergers & Acquisitions','Venture Capital','Equity & Bond Investments','Economics of Emerging Markets','Corporate Valuation','Global Financial Institutions & Investment Banking','International Economics','Behavioural Economics'] },
+    { label:'MBA Banking', animal:'animal-elephant.jpeg', name:'Finance & Banking', type:'MBA · 2015', uni:'University of Chittagong, Bangladesh', year:'2013 – 2015',
+      courses:['Bank Fund Management','Portfolio Management','Public Finance & Taxation','Organisational Behaviour','Marketing Management','Supply Chain Management'] },
+    { label:'BBA Finance', animal:'animal-owl.jpeg', name:'Finance & Accounting', type:'BBA · 2013', uni:'Independent University, Bangladesh', year:'2009 – 2013',
+      courses:['International Finance','Product & Operations Management','Business Law','Auditing','Investment Management','Cost Accounting','Micro & Macro Economics'] }
   ];
 
-  const arena = document.getElementById('arena');
-  const SZ = 120, PAD = 16;
-  const W = () => arena.clientWidth;
-  const H = () => arena.clientHeight;
-
-  const state = [], wraps = [];
+  const staircase = document.getElementById('staircase');
 
   degrees.forEach((deg, i) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'animal-wrap';
+    // Connector before step (except first)
+    if (i > 0) {
+      const conn = document.createElement('div');
+      conn.className = 'step-connector';
+      conn.style.marginLeft = (54 + (i-1)*40) + 'px';
+      staircase.appendChild(conn);
+    }
+
+    const step = document.createElement('div');
+    step.className = 'step';
+    step.style.marginLeft = (i * 40) + 'px';
+
     const circle = document.createElement('div');
     circle.className = 'animal-circle';
-    circle.style.setProperty('--bounce-dur', `${0.55 + i*0.07}s`);
-    circle.style.setProperty('--bounce-delay', `${i*0.28}s`);
     const img = document.createElement('img');
     img.src = deg.animal; img.alt = deg.label;
     circle.appendChild(img);
-    const label = document.createElement('div');
-    label.className = 'animal-label'; label.textContent = deg.label;
-    wrap.appendChild(circle); wrap.appendChild(label);
-    wrap.addEventListener('click', () => openModal(deg));
-    arena.appendChild(wrap); wraps.push(wrap);
-    setTimeout(() => { wrap.style.opacity = '1'; }, 200 + i*160);
 
-    // Spread in 2x2 grid across full arena
-    const col = i % 2, row = Math.floor(i / 2);
-    const x = PAD + col * (W() * 0.55);
-    const y = PAD + row * (H() * 0.50);
-    const angle = Math.random() * Math.PI * 2;
-    state.push({ x, y, vx: Math.cos(angle)*0.5, vy: Math.sin(angle)*0.45 });
-    wrap.style.left = x + 'px'; wrap.style.top = y + 'px';
+    const info = document.createElement('div');
+    info.className = 'step-info';
+    info.innerHTML = `<div class="step-tag">${deg.type}</div><div class="step-name">${deg.name}</div><div class="step-uni">${deg.uni}</div>`;
+
+    step.appendChild(circle);
+    step.appendChild(info);
+    step.addEventListener('click', () => openModal(deg));
+    staircase.appendChild(step);
   });
-
-  function float() {
-    state.forEach((s, i) => {
-      s.x += s.vx; s.y += s.vy;
-      if (s.x < PAD)        { s.x = PAD;        s.vx =  Math.abs(s.vx); }
-      if (s.x > W()-SZ-PAD) { s.x = W()-SZ-PAD; s.vx = -Math.abs(s.vx); }
-      if (s.y < PAD)        { s.y = PAD;        s.vy =  Math.abs(s.vy); }
-      if (s.y > H()-SZ-PAD) { s.y = H()-SZ-PAD; s.vy = -Math.abs(s.vy); }
-      wraps[i].style.left = s.x + 'px'; wraps[i].style.top = s.y + 'px';
-    });
-    requestAnimationFrame(float);
-  }
-  float();
 
   function openModal(deg) {
     document.getElementById('modalName').textContent = deg.name;
     document.getElementById('modalType').textContent = deg.type;
     document.getElementById('modalUni').textContent = deg.uni;
     document.getElementById('modalYear').textContent = deg.year;
-    const logoEl = document.getElementById('modalLogo');
-    logoEl.innerHTML = '';
+    const animalEl = document.getElementById('modalAnimal');
+    animalEl.innerHTML = '';
     const img = document.createElement('img');
-    img.src = deg.logo; img.alt = deg.name;
-    img.onerror = function() { this.remove(); const d = document.createElement('div'); d.className = 'initials'; d.textContent = deg.fallback; logoEl.appendChild(d); };
-    logoEl.appendChild(img);
+    img.src = deg.animal; img.alt = deg.name;
+    animalEl.appendChild(img);
     const list = document.getElementById('modalCourses');
     list.innerHTML = '';
     deg.courses.forEach(c => { const p = document.createElement('span'); p.className = 'course-pill'; p.textContent = c; list.appendChild(p); });
@@ -191,74 +190,25 @@
   document.getElementById('closeBtn').addEventListener('click', closeModal);
   document.getElementById('overlay').addEventListener('click', e => { if (e.target === document.getElementById('overlay')) closeModal(); });
 
-  // Shooting star cursor (desktop only)
+  // Star cursor
   if (window.matchMedia("(pointer: fine)").matches) {
     const canvas = document.getElementById("starCursor");
     const ctx = canvas.getContext("2d");
-    let W2, H2;
-    function resize() { W2 = canvas.width = window.innerWidth; H2 = canvas.height = window.innerHeight; }
+    let CW, CH;
+    function resize() { CW = canvas.width = window.innerWidth; CH = canvas.height = window.innerHeight; }
     resize(); window.addEventListener("resize", resize);
     document.body.style.cursor = "none";
-    let mx = -200, my = -200, moving = false, moveTimer;
-    const trail = [];
-    document.addEventListener("mousemove", e => {
-      mx = e.clientX; my = e.clientY; moving = true;
-      trail.push({ x: mx, y: my });
-      if (trail.length > 24) trail.shift();
-      clearTimeout(moveTimer); moveTimer = setTimeout(() => { moving = false; }, 80);
-    });
-    function drawStar(x, y, r, alpha) {
-      ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 10;
-      ctx.beginPath();
-      for (let i = 0; i < 5; i++) { const oa=(i*4*Math.PI)/5-Math.PI/2, ia=oa+Math.PI/5; if(i===0) ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa)); ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia)); }
-      ctx.closePath(); ctx.fill(); ctx.restore();
-    }
-    function drawSparkle(x, y, r, alpha) {
-      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = "#FFD700"; ctx.shadowColor = "#FFD700"; ctx.shadowBlur = 14; ctx.lineWidth = 1.5;
-      for (let i = 0; i < 4; i++) { const a=(i*Math.PI)/4; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3); ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.stroke(); }
-      ctx.restore();
-    }
-    let sr = 6, sd = 1;
-    function render() {
-      ctx.clearRect(0, 0, W2, H2);
-      if (moving && trail.length > 1) {
-        for (let i = 1; i < trail.length; i++) {
-          const t = i/trail.length, p = trail[i], pp = trail[i-1];
-          ctx.save(); ctx.strokeStyle="#FFD700"; ctx.shadowColor="#FFD700"; ctx.shadowBlur=10; ctx.globalAlpha=t*0.65; ctx.lineWidth=t*3.5; ctx.lineCap="round";
-          ctx.beginPath(); ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.restore();
-          if (i%5===0) drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);
-        }
-      }
-      if (!moving) { sr+=sd*0.07; if(sr>9||sr<5) sd*=-1; drawStar(mx,my,sr,1); drawSparkle(mx,my,sr+7,0.55); }
-      else drawStar(mx,my,5,1);
-      requestAnimationFrame(render);
-    }
+    let mx=-200,my=-200,moving=false,moveTimer;const trail=[];
+    document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;moving=true;trail.push({x:mx,y:my});if(trail.length>24)trail.shift();clearTimeout(moveTimer);moveTimer=setTimeout(()=>{moving=false;},80);});
+    function drawStar(x,y,r,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=10;ctx.beginPath();for(let i=0;i<5;i++){const oa=(i*4*Math.PI)/5-Math.PI/2,ia=oa+Math.PI/5;if(i===0)ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa));else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa));ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia));}ctx.closePath();ctx.fill();ctx.restore();}
+    function drawSparkle(x,y,r,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=14;ctx.lineWidth=1.5;for(let i=0;i<4;i++){const a=(i*Math.PI)/4;ctx.beginPath();ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3);ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);ctx.stroke();}ctx.restore();}
+    let sr=6,sd=1;
+    function render(){ctx.clearRect(0,0,CW,CH);if(moving&&trail.length>1){for(let i=1;i<trail.length;i++){const t=i/trail.length,p=trail[i],pp=trail[i-1];ctx.save();ctx.strokeStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=10;ctx.globalAlpha=t*0.65;ctx.lineWidth=t*3.5;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(pp.x,pp.y);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.restore();if(i%5===0)drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);}}if(!moving){sr+=sd*0.07;if(sr>9||sr<5)sd*=-1;drawStar(mx,my,sr,1);drawSparkle(mx,my,sr+7,0.55);}else drawStar(mx,my,5,1);requestAnimationFrame(render);}
     render();
   }
 
-  // Swipe navigation
-  (function() {
-    const prev = 'experience.html', next = 'skills.html';
-    let startX = 0, startY = 0;
-    document.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }, { passive: true });
-    document.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - startX;
-      const dy = e.changedTouches[0].clientY - startY;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-        if (dx < 0) window.location.href = next;
-        else window.location.href = prev;
-      }
-    }, { passive: true });
-    // Arrow keys for laptop
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') window.location.href = next;
-      if (e.key === 'ArrowLeft') window.location.href = prev;
-    });
-  })();
-
+  // Swipe
+  (function(){const prev='experience.html',next='skills.html';let sx=0,sy=0;document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){if(dx<0)window.location.href=next;else window.location.href=prev;}},{passive:true});document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')window.location.href=next;if(e.key==='ArrowLeft')window.location.href=prev;});})();
 </script>
 </body>
 </html>
