@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Education – Nabila Alam</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -14,7 +13,6 @@
     html { background: #f0d4d0; }
     body { background: #f0d4d0; color: var(--olive); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
 
-    #starCursor { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; background: transparent; }
 
     nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; background: rgba(61,74,46,0.88); backdrop-filter: blur(10px); padding: 12px 24px; border-radius: 40px; z-index: 100; }
     nav a { color: #f5f0e8; text-decoration: none; font-size: 18px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, color 0.2s; }
@@ -90,10 +88,10 @@
     .courses-list { display: flex; flex-wrap: wrap; gap: 7px; }
     .course-pill { background: rgba(240,212,208,0.5); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 5px 12px; font-size: 0.82rem; color: var(--olive); }
     .modal-close { position: absolute; top: 16px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: rgba(61,74,46,0.08); border: none; cursor: pointer; font-size: 16px; color: var(--olive); display: flex; align-items: center; justify-content: center; }
-  </style>
+      html, body, a, button, .company-row, .contact-card, .step, [onclick] { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.7-5.3 4.8 1.5 7-6.2-3.6-6.2 3.6 1.5-7L2 9.3l7.1-.7z' fill='%23c9a84c' stroke='%233d4a2e' stroke-width='1' stroke-linejoin='round'/></svg>") 12 12, auto !important; }
+</style>
 </head>
 <body>
-<canvas id="starCursor"></canvas>
 <nav>
   <a href="index.html" title="Home">🏠</a><span>|</span>
   <a href="experience.html" title="Experience">💼</a><span>|</span>
@@ -191,22 +189,6 @@
   document.getElementById('closeBtn').addEventListener('click', closeModal);
   document.getElementById('overlay').addEventListener('click', e => { if (e.target === document.getElementById('overlay')) closeModal(); });
 
-  // Star cursor
-  if (window.matchMedia("(pointer: fine)").matches) {
-    const canvas = document.getElementById("starCursor");
-    const ctx = canvas.getContext("2d");
-    let CW, CH;
-    function resize() { CW = canvas.width = window.innerWidth; CH = canvas.height = window.innerHeight; }
-    resize(); window.addEventListener("resize", resize);
-    document.body.style.cursor = "none";
-    let mx=-200,my=-200,moving=false,moveTimer;const trail=[];
-    document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;moving=true;trail.push({x:mx,y:my});if(trail.length>24)trail.shift();clearTimeout(moveTimer);moveTimer=setTimeout(()=>{moving=false;},80);});
-    function drawStar(x,y,r,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=10;ctx.beginPath();for(let i=0;i<5;i++){const oa=(i*4*Math.PI)/5-Math.PI/2,ia=oa+Math.PI/5;if(i===0)ctx.moveTo(x+r*Math.cos(oa),y+r*Math.sin(oa));else ctx.lineTo(x+r*Math.cos(oa),y+r*Math.sin(oa));ctx.lineTo(x+r*0.4*Math.cos(ia),y+r*0.4*Math.sin(ia));}ctx.closePath();ctx.fill();ctx.restore();}
-    function drawSparkle(x,y,r,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=14;ctx.lineWidth=1.5;for(let i=0;i<4;i++){const a=(i*Math.PI)/4;ctx.beginPath();ctx.moveTo(x+Math.cos(a)*r*0.3,y+Math.sin(a)*r*0.3);ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);ctx.stroke();}ctx.restore();}
-    let sr=6,sd=1;
-    function render(){ctx.clearRect(0,0,CW,CH);if(moving&&trail.length>1){for(let i=1;i<trail.length;i++){const t=i/trail.length,p=trail[i],pp=trail[i-1];ctx.save();ctx.strokeStyle="#FFD700";ctx.shadowColor="#FFD700";ctx.shadowBlur=10;ctx.globalAlpha=t*0.65;ctx.lineWidth=t*3.5;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(pp.x,pp.y);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.restore();if(i%5===0)drawStar(p.x+(Math.random()-0.5)*8,p.y+(Math.random()-0.5)*8,t*3+1,t*0.5);}}if(!moving){sr+=sd*0.07;if(sr>9||sr<5)sd*=-1;drawStar(mx,my,sr,1);drawSparkle(mx,my,sr+7,0.55);}else drawStar(mx,my,5,1);requestAnimationFrame(render);}
-    render();
-  }
 
   // Swipe
   (function(){const prev='experience.html',next='skills.html';let sx=0,sy=0;document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){if(dx<0)window.location.href=next;else window.location.href=prev;}},{passive:true});document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')window.location.href=next;if(e.key==='ArrowLeft')window.location.href=prev;});})();
